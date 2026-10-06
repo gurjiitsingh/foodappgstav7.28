@@ -48,6 +48,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import java.time.Instant
 import java.time.ZoneId
+import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayClosingScreen(
@@ -59,6 +62,19 @@ fun DayClosingScreen(
 
     val ui by viewModel.uiState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    LaunchedEffect(ui.errorMessage) {
+        ui.errorMessage?.let { message ->
+
+            Toast.makeText(
+                context,
+                "Day already closed",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -191,18 +207,31 @@ fun DayClosingScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    )
+                    {
 
                         OutlinedTextField(
                             value = ui.actualCash,
                             onValueChange = viewModel::updateActualCash,
                             modifier = Modifier.weight(1f),
                             singleLine = true,
-                            label = { Text("Actual Cash Counted") }
+                            label = {
+                                Text("Actual Cash Counted")
+                            }
+                        )
+
+                        OutlinedTextField(
+                            value = ui.cashHandedOver,
+                            onValueChange = viewModel::updateCashHandedOver,
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            label = {
+                                Text("Cash Handed Over")
+                            }
                         )
 
                         Button(
-                            modifier = Modifier.height(56.dp), // Match TextField height
+                            modifier = Modifier.height(56.dp),
                             onClick = onCloseDay
                         ) {
                             Icon(

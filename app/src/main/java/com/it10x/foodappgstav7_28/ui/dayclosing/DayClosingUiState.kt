@@ -15,6 +15,7 @@ data class DayClosingUiState(
 
     val actualCash: String = "",
 
+    val cashHandedOver: String = "",
 
     val notes: String = "",
 

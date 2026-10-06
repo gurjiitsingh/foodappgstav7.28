@@ -25,7 +25,7 @@ data class PosDayClosingEntity(
 
     val expectedCash: Double,
     val actualCash: Double,
-
+    val cashHandedOver: Double,
     val cashDifference: Double,
 
     val totalSales: Double,

@@ -89,6 +89,10 @@ class DayClosingViewModel(
 
                     openingCash = businessDay.openingCash,
 
+                    actualCash = "",
+
+                    cashHandedOver = "",
+
                     totalOrders = summary.totalOrders,
 
                     totalSales = summary.totalSales,
@@ -237,7 +241,22 @@ class DayClosingViewModel(
                         .toDoubleOrNull()
                         ?: 0.0
 
+                val cashHandedOver =
+                    _uiState.value.cashHandedOver
+                        .toDoubleOrNull()
+                        ?: 0.0
 
+                if (cashHandedOver < 0.0) {
+                    throw IllegalArgumentException(
+                        "Cash handed over cannot be negative."
+                    )
+                }
+
+                if (cashHandedOver > actualCash) {
+                    throw IllegalArgumentException(
+                        "Cash handed over cannot be greater than actual cash."
+                    )
+                }
 
 
                 val expectedCash =
@@ -306,6 +325,8 @@ class DayClosingViewModel(
                         actualCash =
                             actualCash,
 
+                        cashHandedOver =
+                            cashHandedOver,
 
                         cashDifference =
                             difference,
@@ -421,7 +442,7 @@ class DayClosingViewModel(
                 businessDayRepository.createNextBusinessDay(
 
                     openingCash =
-                        actualCash,
+                        actualCash - cashHandedOver,
 
                     openedById =
                         closedById ?: "",
@@ -481,9 +502,32 @@ class DayClosingViewModel(
 
     fun updateActualCash(value: String) {
 
+        val currentHandedOver =
+            _uiState.value.cashHandedOver
+
+        val currentActualCash =
+            _uiState.value.actualCash
+
         _uiState.value =
             _uiState.value.copy(
-                actualCash = value
+                actualCash = value,
+                cashHandedOver =
+                    if (
+                        currentHandedOver.isEmpty() ||
+                        currentHandedOver == currentActualCash
+                    ) {
+                        value
+                    } else {
+                        currentHandedOver
+                    }
+            )
+    }
+
+    fun updateCashHandedOver(value: String) {
+
+        _uiState.value =
+            _uiState.value.copy(
+                cashHandedOver = value
             )
     }
 
