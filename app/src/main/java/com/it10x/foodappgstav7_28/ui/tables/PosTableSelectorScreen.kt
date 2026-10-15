@@ -144,38 +144,14 @@ fun TableSelectorGrid(
                             items(areaTables) { ui ->
                                 val table = ui.table
 
-//                                val bgColor = when (ui.color) {
-//                                    PosTableViewModel.TableColor.GREEN -> tableGreen
-//                                    PosTableViewModel.TableColor.BLUE -> tableBlue
-//                                    PosTableViewModel.TableColor.RED -> tableRed
-//                                    PosTableViewModel.TableColor.GRAY -> tableGray
-//                                }
-//
-//                                val contentColor = Color.White
-
-
-                                val bgColor = when {
-                                    ui.billDoneCount > 0 ->
-                                        Color(0xFFE57373) // Red: bill exists
-
-                                    ui.kitchenPendingCount > 0 ->
-                                        Color(0xFF81C784) // Green: kitchen items
-
-                                    ui.cartCount > 0 ->
-                                        Color(0xFF64B5F6) // Blue: cart items
-
-                                    else ->
-                                        MaterialTheme.colorScheme.surfaceVariant // Available
+                                val bgColor = when (ui.color) {
+                                    PosTableViewModel.TableColor.GREEN -> tableGreen
+                                    PosTableViewModel.TableColor.BLUE -> tableBlue
+                                    PosTableViewModel.TableColor.RED -> tableRed
+                                    PosTableViewModel.TableColor.GRAY -> tableGray
                                 }
 
-                                val contentColor = when {
-                                    ui.billDoneCount > 0 ||
-                                            ui.kitchenPendingCount > 0 ||
-                                            ui.cartCount > 0 -> Color.White
-
-                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
-                                }
-
+                                val contentColor = Color.White
 
                                 Surface(
                                     color = bgColor,
