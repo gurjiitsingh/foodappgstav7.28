@@ -1,7 +1,6 @@
 package com.it10x.foodappgstav7_28.ui.pos
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -76,13 +75,26 @@ fun TableSelectorGrid(
                         .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                 ){
-                    // 🔹 Close buttons (like cancel)
+
+
+
+
+// 🔹 Header: Title on left, Close button on right
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 4.dp),
-                        horizontalArrangement = Arrangement.End
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        Text(
+                            text = "Dine in Tables",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = PosTheme.product.productCardText
+                            )
+                        )
+
                         IconButton(onClick = onDismiss) {
                             Icon(
                                 imageVector = Icons.Default.Close,
@@ -91,6 +103,8 @@ fun TableSelectorGrid(
                             )
                         }
                     }
+
+
 
                     groupedByArea.entries.forEach { (areaName, areaTables) ->
 
@@ -130,14 +144,38 @@ fun TableSelectorGrid(
                             items(areaTables) { ui ->
                                 val table = ui.table
 
-                                val bgColor = when (ui.color) {
-                                    PosTableViewModel.TableColor.GREEN -> tableGreen
-                                    PosTableViewModel.TableColor.BLUE -> tableBlue
-                                    PosTableViewModel.TableColor.RED -> tableRed
-                                    PosTableViewModel.TableColor.GRAY -> tableGray
+//                                val bgColor = when (ui.color) {
+//                                    PosTableViewModel.TableColor.GREEN -> tableGreen
+//                                    PosTableViewModel.TableColor.BLUE -> tableBlue
+//                                    PosTableViewModel.TableColor.RED -> tableRed
+//                                    PosTableViewModel.TableColor.GRAY -> tableGray
+//                                }
+//
+//                                val contentColor = Color.White
+
+
+                                val bgColor = when {
+                                    ui.billDoneCount > 0 ->
+                                        Color(0xFFE57373) // Red: bill exists
+
+                                    ui.kitchenPendingCount > 0 ->
+                                        Color(0xFF81C784) // Green: kitchen items
+
+                                    ui.cartCount > 0 ->
+                                        Color(0xFF64B5F6) // Blue: cart items
+
+                                    else ->
+                                        MaterialTheme.colorScheme.surfaceVariant // Available
                                 }
 
-                                val contentColor = Color.White
+                                val contentColor = when {
+                                    ui.billDoneCount > 0 ||
+                                            ui.kitchenPendingCount > 0 ||
+                                            ui.cartCount > 0 -> Color.White
+
+                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+
 
                                 Surface(
                                     color = bgColor,
@@ -241,21 +279,32 @@ fun TableSelectorGrid(
                         .verticalScroll(rememberScrollState())
                         .padding(6.dp)
                 ) {
-                    // 🔹 Close buttons (like cancel)
+                    // 🔹 Header: Title on left, Close button on right
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 4.dp),
-                        horizontalArrangement = Arrangement.End
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        Text(
+                            text = "Dine in Tables",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = PosTheme.product.productCardText
+                            )
+                        )
+
                         IconButton(onClick = onDismiss) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Close"
+                                contentDescription = "Close",
+                                tint = PosTheme.product.productCardText
                             )
                         }
-
                     }
+
+
 
                     groupedByArea.entries.forEach { (areaName, areaTables) ->
 
@@ -356,14 +405,7 @@ fun TableSelectorGrid(
                                                     .fillMaxWidth()
                                                     .alpha(if (ui.cartCount > 0) 1f else 0f)
                                             )
-//                                        StatusBadge(
-//                                            icon = "🍳",
-//                                            text = ui.kitchenPendingCount.toString(),
-//                                            bgColor = Color(0xFFF9A825).copy(alpha = 0.25f),
-//                                            modifier = Modifier
-//                                                .fillMaxWidth()
-//                                                .alpha(if (ui.kitchenPendingCount > 0) 1f else 0f)
-//                                        )
+//
                                             StatusBadge(
                                                 icon = "🧾",
                                                 text = ui.billDoneCount.toString(),
