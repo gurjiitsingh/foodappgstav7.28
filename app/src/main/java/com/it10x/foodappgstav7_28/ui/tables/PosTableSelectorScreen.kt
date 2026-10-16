@@ -22,12 +22,19 @@ import androidx.compose.ui.unit.dp
 import com.it10x.foodappgstav7_28.viewmodel.PosTableViewModel
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.it10x.foodappgstav7_28.ui.theme.PosTheme
-
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import android.util.Log
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun TableSelectorGrid(
@@ -53,11 +60,234 @@ fun TableSelectorGrid(
     val tableGray = Color(0xFF585E63)
 
 
-    //TABLET
-    if(!isPhone){
+
+// TABLET
+    // TABLET
+
+    if (!isPhone) {
+        val screenWidth = LocalConfiguration.current.screenWidthDp
+
         Dialog(
             onDismissRequest = onDismiss,
-            properties = DialogProperties(usePlatformDefaultWidth = false) // ✅ allows custom width
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                shape = RoundedCornerShape(0.dp),
+                color = PosTheme.product.productCardBg,
+                tonalElevation = 0.dp,
+                shadowElevation = 0.dp
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp)
+                ) {
+                    // HEADER
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Dine in Tables",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = PosTheme.product.productCardText
+                            )
+                        )
+
+                        IconButton(onClick = onDismiss) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close",
+                                tint = PosTheme.product.productCardText
+                            )
+                        }
+                    }
+
+                    // TABLES GROUPED BY AREA
+                    groupedByArea.entries.forEach { (areaName, areaTables) ->
+
+                        Text(
+                            text = areaName,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = PosTheme.product.productCardText
+                            ),
+                            modifier = Modifier
+                                .padding(vertical = 5.dp)
+                                .fillMaxWidth()
+                        )
+
+                        // GRID SIZE
+                        val availableWidth = screenWidth - 32
+                        val columns = (availableWidth / 158).coerceAtLeast(1)
+                        val rows =
+                            (areaTables.size + columns - 1) / columns
+
+                        val gridHeight =
+                            (rows * 128 + (rows - 1) * 8).dp
+
+                        LazyVerticalGrid(
+                            columns = GridCells.Adaptive(minSize = 150.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(gridHeight)
+                                .padding(bottom = 5.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            userScrollEnabled = false
+                        ) {
+                            items(areaTables) { ui ->
+
+                                val table = ui.table
+                                val isSelected = selectedTable == table.id
+
+                                // COLORS — SAME PRIORITY AS TableChangeCard
+                                val bgColor = when {
+                                    isSelected ->
+                                        MaterialTheme.colorScheme.primary
+
+                                    ui.billDoneCount > 0 ->
+                                        Color(0xFFE57373)
+
+                                    ui.kitchenPendingCount > 0 ->
+                                        Color(0xFF81C784)
+
+                                    ui.cartCount > 0 ->
+                                        Color(0xFF64B5F6)
+
+                                    else ->
+                                        MaterialTheme.colorScheme.surfaceVariant
+                                }
+
+                                val contentColor = when {
+                                    isSelected ->
+                                        MaterialTheme.colorScheme.onPrimary
+
+                                    ui.billDoneCount > 0 ||
+                                            ui.kitchenPendingCount > 0 ||
+                                            ui.cartCount > 0 ->
+                                        Color.White
+
+                                    else ->
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+
+                                // STATUS — ONE CENTERED LABEL
+
+
+
+                                val statusText = when {
+                                    ui.billDoneCount > 0 && ui.cartCount > 0 ->
+                                        "BILL ${ui.billDoneCount}\nCART ${ui.cartCount}"
+
+                                    ui.billDoneCount > 0 ->
+                                        "BILL ${ui.billDoneCount}"
+
+                                    ui.kitchenPendingCount > 0 ->
+                                        "KITCHEN"
+
+                                    ui.cartCount > 0 ->
+                                        "CART ${ui.cartCount}"
+
+                                    else ->
+                                        "AVAILABLE"
+                                }
+
+
+
+
+                                // TABLE CARD — SIMILAR TO TableChangeCard
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(120.dp)
+                                        .animateContentSize()
+                                        .clickable {
+                                            onTableSelected(table.id)
+                                        },
+                                    shape = RoundedCornerShape(10.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = bgColor
+                                    ),
+                                    elevation = CardDefaults.cardElevation(
+                                        defaultElevation = 3.dp
+                                    )
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(6.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        // CENTERED TABLE NAME AND STATUS
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment =
+                                                Alignment.CenterHorizontally,
+                                            verticalArrangement =
+                                                Arrangement.Center
+                                        ) {
+                                            Text(
+                                                text = table.tableName,
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = contentColor,
+                                                textAlign = TextAlign.Center,
+                                                maxLines = 2
+                                            )
+
+                                            Spacer(
+                                                modifier = Modifier.height(3.dp)
+                                            )
+
+                                            Text(
+                                                text = statusText,
+                                                fontSize = 12.sp,
+                                                color = contentColor.copy(
+                                                    alpha = 0.9f
+                                                ),
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+
+                                        // SELECTION CHECK — TOP RIGHT
+                                        if (isSelected) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Selected",
+                                                modifier = Modifier
+                                                    .align(Alignment.TopEnd)
+                                                    .padding(2.dp),
+                                                tint = contentColor
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    //PHONE
+
+    if (isPhone) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            )
         ) {
             Surface(
                 modifier = Modifier
@@ -67,187 +297,7 @@ fun TableSelectorGrid(
                 color = PosTheme.product.productCardBg,
                 tonalElevation = 8.dp,
                 shadowElevation = 8.dp
-            )
-            {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp)
-                ){
-
-
-
-
-// 🔹 Header: Title on left, Close button on right
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "Dine in Tables",
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = PosTheme.product.productCardText
-                            )
-                        )
-
-                        IconButton(onClick = onDismiss) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Close",
-                                tint = PosTheme.product.productCardText
-                            )
-                        }
-                    }
-
-
-
-                    groupedByArea.entries.forEach { (areaName, areaTables) ->
-
-                        // 🔹 Area Title
-                        Text(
-                            text = areaName,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                              //  color = PosTheme.topBar.background
-                                color = PosTheme.product.productCardText
-                            ),
-                            modifier = Modifier
-                                .padding(vertical = 5.dp)
-                                .fillMaxWidth()
-                        )
-
-                        // 🔹 Grid for each area — unchanged
-//                    val rows = (areaTables.size + 4) / 7
-//                    val gridHeight = (rows * 125).dp
-
-                        // Estimate how many columns fit based on screen width and min cell size
-                        val screenWidth = LocalConfiguration.current.screenWidthDp
-                        val columns = (screenWidth / 105).coerceAtLeast(1) // ~100dp per cell + spacing
-                        val rows = (areaTables.size + columns - 1) / columns
-                        val gridHeight = (rows * 115).dp
-                        LazyVerticalGrid(
-                            //columns = GridCells.Fixed(9), // ✅ keep logic
-                            columns = GridCells.Adaptive(minSize = 85.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(gridHeight)
-                                .padding(bottom = 5.dp),
-                            horizontalArrangement = Arrangement.spacedBy(5.dp),
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
-                            userScrollEnabled = false
-                        ) {
-                            items(areaTables) { ui ->
-                                val table = ui.table
-
-                                val bgColor = when (ui.color) {
-                                    PosTableViewModel.TableColor.GREEN -> tableGreen
-                                    PosTableViewModel.TableColor.BLUE -> tableBlue
-                                    PosTableViewModel.TableColor.RED -> tableRed
-                                    PosTableViewModel.TableColor.GRAY -> tableGray
-                                }
-
-                                val contentColor = Color.White
-
-                                Surface(
-                                    color = bgColor,
-                                    shape = RoundedCornerShape(4.dp),
-                                    modifier = Modifier
-                                        .aspectRatio(0.89f)
-                                        .animateContentSize()
-                                        .clickable { onTableSelected(table.id) }
-                                ){
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(6.dp),
-                                        verticalArrangement = Arrangement.SpaceBetween,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        // 🔹 TABLE NAME
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.SpaceBetween
-                                        ) {
-                                            Text(
-                                                text = table.tableName,
-                                                style = MaterialTheme.typography.titleLarge,
-                                                color = contentColor
-                                            )
-
-//                                            if (ui.billAmount > 0) {
-//                                                Text(
-//                                                    text = ui.billAmount.toInt().toString(),
-//                                                    style = MaterialTheme.typography.bodySmall,
-//                                                    fontWeight = FontWeight.Bold,
-//                                                   // color = PosTheme.accent.primaryActionBg
-//                                                            color = PosTheme.product.productCardText
-//                                                )
-//                                            }
-                                        }
-
-                                        // 🔹 STATUS INFO
-                                        Column(
-                                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            modifier = Modifier.fillMaxWidth()
-                                        ) {
-                                            StatusBadge(
-                                                icon = "🛒",
-                                                text = ui.cartCount.toString(),
-                                                bgColor = PosTheme.accent.primaryActionBg.copy(alpha = 0.2f),
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .alpha(if (ui.cartCount > 0) 1f else 0f)
-                                            )
-//                                        StatusBadge(
-//                                            icon = "🍳",
-//                                            text = ui.kitchenPendingCount.toString(),
-//                                            bgColor = Color(0xFFF9A825).copy(alpha = 0.25f),
-//                                            modifier = Modifier
-//                                                .fillMaxWidth()
-//                                                .alpha(if (ui.kitchenPendingCount > 0) 1f else 0f)
-//                                        )
-                                            StatusBadge(
-                                                icon = "🧾",
-                                                text = ui.billDoneCount.toString(),
-                                                bgColor = Color(0xFF2E7D32).copy(alpha = 0.55f),
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .alpha(if (ui.billDoneCount > 0) 1f else 0f)
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-
-                }
-            }
-        }
-    }
-
-    //PHONE
-    if(isPhone){
-        Dialog(
-            onDismissRequest = onDismiss,
-            properties = DialogProperties(usePlatformDefaultWidth = false) // ✅ allows custom width
-        ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                shape = RoundedCornerShape(16.dp),
-                tonalElevation = 8.dp,
-                shadowElevation = 8.dp
-            )
-            {
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -255,7 +305,7 @@ fun TableSelectorGrid(
                         .verticalScroll(rememberScrollState())
                         .padding(6.dp)
                 ) {
-                    // 🔹 Header: Title on left, Close button on right
+                    // HEADER
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -280,115 +330,163 @@ fun TableSelectorGrid(
                         }
                     }
 
-
-
+                    // TABLES GROUPED BY AREA
                     groupedByArea.entries.forEach { (areaName, areaTables) ->
 
-                        // 🔹 Area Title
                         Text(
                             text = areaName,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = PosTheme.product.productCardText
                             ),
                             modifier = Modifier
                                 .padding(vertical = 5.dp)
                                 .fillMaxWidth()
                         )
 
-                        // 🔹 Grid for each area — unchanged
-//                    val rows = (areaTables.size + 4) / 7
-//                    val gridHeight = (rows * 125).dp
+                        // MOBILE GRID DIMENSIONS
+                        val screenWidth =
+                            LocalConfiguration.current.screenWidthDp
 
-                        // Estimate how many columns fit based on screen width and min cell size
-                        val screenWidth = LocalConfiguration.current.screenWidthDp
-                        val columns = (screenWidth / 110).coerceAtLeast(1) // ~100dp per cell + spacing
-//                        val rows = (areaTables.size + columns - 1) / columns
-//                        val gridHeight = (rows * 110).dp
-                        val rows = (areaTables.size + columns - 1) / columns
+                        val columns = (screenWidth / 110)
+                            .coerceAtLeast(1)
+
+                        val rows =
+                            (areaTables.size + columns - 1) / columns
+
                         val gridHeight = (rows * 90).dp
+
                         LazyVerticalGrid(
-                            //columns = GridCells.Fixed(9), // ✅ keep logic
                             columns = GridCells.Adaptive(minSize = 85.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(gridHeight)
                                 .padding(bottom = 5.dp),
-                            horizontalArrangement = Arrangement.spacedBy(5.dp),
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
+                            horizontalArrangement =
+                                Arrangement.spacedBy(5.dp),
+                            verticalArrangement =
+                                Arrangement.spacedBy(5.dp),
                             userScrollEnabled = false
                         ) {
                             items(areaTables) { ui ->
+
                                 val table = ui.table
                                 val isSelected = selectedTable == table.id
 
-                                val bgColor = when (ui.color) {
-                                    PosTableViewModel.TableColor.GREEN -> tableGreen
-                                    PosTableViewModel.TableColor.BLUE -> tableBlue
-                                    PosTableViewModel.TableColor.RED -> tableRed
-                                    PosTableViewModel.TableColor.GRAY -> tableGray
+                                // SAME COLOR PRIORITY AS TABLET
+                                val bgColor = when {
+                                    isSelected ->
+                                        MaterialTheme.colorScheme.primary
+
+                                    ui.billDoneCount > 0 ->
+                                        Color(0xFFE57373)
+
+                                    ui.kitchenPendingCount > 0 ->
+                                        Color(0xFF81C784)
+
+                                    ui.cartCount > 0 ->
+                                        Color(0xFF64B5F6)
+
+                                    else ->
+                                        MaterialTheme.colorScheme.surfaceVariant
                                 }
 
-                                val contentColor = Color.White
+                                val contentColor = when {
+                                    isSelected ->
+                                        MaterialTheme.colorScheme.onPrimary
 
-                                Surface(
-                                    color = bgColor,
-                                    shape = RoundedCornerShape(4.dp),
+                                    ui.billDoneCount > 0 ||
+                                            ui.kitchenPendingCount > 0 ||
+                                            ui.cartCount > 0 ->
+                                        Color.White
+
+                                    else ->
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+
+                                // SAME STATUS LOGIC AS TABLET
+                                val statusText = when {
+                                    ui.billDoneCount > 0 &&
+                                            ui.cartCount > 0 ->
+                                        "BILL ${ui.billDoneCount}\nCART ${ui.cartCount}"
+
+                                    ui.billDoneCount > 0 ->
+                                        "BILL ${ui.billDoneCount}"
+
+                                    ui.kitchenPendingCount > 0 ->
+                                        "KITCHEN"
+
+                                    ui.cartCount > 0 ->
+                                        "CART ${ui.cartCount}"
+
+                                    else ->
+                                        "AVAILABLE"
+                                }
+
+                                // MOBILE TABLE CARD
+                                Card(
                                     modifier = Modifier
-                                        .aspectRatio(0.89f)
+                                        .fillMaxWidth()
+                                        .height(84.dp)
                                         .animateContentSize()
-                                        .clickable { onTableSelected(table.id) }
+                                        .clickable {
+                                            onTableSelected(table.id)
+                                        },
+                                    shape = RoundedCornerShape(8.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = bgColor
+                                    ),
+                                    elevation = CardDefaults.cardElevation(
+                                        defaultElevation = 2.dp
+                                    )
                                 ) {
-                                    Column(
+                                    Box(
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .padding(6.dp),
-                                        verticalArrangement = Arrangement.SpaceBetween,
-                                        horizontalAlignment = Alignment.CenterHorizontally
+                                            .padding(4.dp),
+                                        contentAlignment = Alignment.Center
                                     ) {
-                                        // 🔹 TABLE NAME
-                                        Row(
+                                        // CENTERED NAME AND STATUS
+                                        Column(
                                             modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.SpaceBetween
+                                            horizontalAlignment =
+                                                Alignment.CenterHorizontally,
+                                            verticalArrangement =
+                                                Arrangement.Center
                                         ) {
                                             Text(
                                                 text = table.tableName,
-                                                style = MaterialTheme.typography.titleLarge,
-                                                color = MaterialTheme.colorScheme.onSurface
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = contentColor,
+                                                textAlign = TextAlign.Center,
+                                                maxLines = 2
                                             )
 
-//                                            if (ui.billAmount > 0) {
-//                                                Text(
-//                                                    text = ui.billAmount.toInt().toString(),
-//                                                    style = MaterialTheme.typography.bodySmall,
-//                                                    fontWeight = FontWeight.Bold,
-//                                                    color = Color.White.copy(alpha = 0.85f)
-//                                                )
-//                                            }
+                                            Spacer(
+                                                modifier = Modifier.height(2.dp)
+                                            )
+
+                                            Text(
+                                                text = statusText,
+                                                fontSize = 10.sp,
+                                                color = contentColor.copy(
+                                                    alpha = 0.9f
+                                                ),
+                                                textAlign = TextAlign.Center,
+                                                lineHeight = 12.sp
+                                            )
                                         }
 
-                                        // 🔹 STATUS INFO
-                                        Column(
-                                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            modifier = Modifier.fillMaxWidth()
-                                        ) {
-                                            StatusBadge(
-                                                icon = "🛒",
-                                                text = ui.cartCount.toString(),
-                                                bgColor = Color(0xFF1976D2).copy(alpha = 0.55f),
+                                        // SELECTED CHECK
+                                        if (isSelected) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Selected",
                                                 modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .alpha(if (ui.cartCount > 0) 1f else 0f)
-                                            )
-//
-                                            StatusBadge(
-                                                icon = "🧾",
-                                                text = ui.billDoneCount.toString(),
-                                                bgColor = PosTheme.accent.cartAddBg.copy(alpha = 0.2f),
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .alpha(if (ui.billDoneCount > 0) 1f else 0f)
+                                                    .align(Alignment.TopEnd)
+                                                    .size(14.dp),
+                                                tint = contentColor
                                             )
                                         }
                                     }
@@ -396,12 +494,11 @@ fun TableSelectorGrid(
                             }
                         }
                     }
-
-
                 }
             }
         }
     }
+
 
 }
 

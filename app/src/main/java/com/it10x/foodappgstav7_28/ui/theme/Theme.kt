@@ -113,74 +113,196 @@ fun FoodPosTheme(
 
 
 
+//        PosThemeMode.CLASSIC -> {
+//
+//            PosTheme.accent = PosAccentColors(
+//                cartAddBg = Color(0xFFFB8500),       // Strong orange (CTA)
+//                cartAddText = Color.White,
+//
+//                cartRemoveBorder = Color(0xFF219EBC), // Blue border
+//                cartRemoveText = Color(0xFF219EBC),
+//
+//                primaryActionBg = Color(0xFF219EBC),  // Main action (blue)
+//                primaryActionText = Color.White
+//            )
+//
+//            PosTheme.product = PosProductColors(
+//                productCardBg = Color.White,
+//                productCardText = Color(0xFF023047)   // Deep navy text
+//            )
+//
+//            PosTheme.topBar = PosTopBarColors(
+//                background = Color(0xFF023047),       // Premium dark header
+//                content = Color.White
+//            )
+//
+//            PosTheme.category = PosCategoryColors(
+//                selectedBg = Color(0xFFFFB703),       // Yellow highlight
+//                selectedText = Color(0xFF023047),
+//
+//                unselectedBg = Color(0xFF8ECAE6),     // Soft blue
+//                unselectedText = Color(0xFF023047)
+//            )
+//
+//            PosTheme.topBarButton = PosTopBarButtonColors(
+//                selectedBg = Color(0xFF219EBC),
+//                selectedContent = Color.White,
+//
+//                unselectedBg = Color(0xFF8ECAE6),
+//                unselectedContent = Color(0xFF023047)
+//            )
+//
+//            PosTheme.bill = PosBillColors(
+//                billBg = Color.White,
+//                billText = Color(0xFF023047),
+//                billTab = Color(0xFFF8FAFC),
+//
+//                inputBg = Color(0xFFF8FAFC),
+//                inputBorder = Color(0xFFB0BEC5),
+//                inputActiveBg = Color(0xFFE3F2FD),
+//                inputActiveBorder = Color(0xFF219EBC),
+//
+//                success = Color(0xFF2E7D32),
+//                warning = Color(0xFFFB8500),
+//                danger = Color(0xFFC62828)
+//            )
+//
+//            lightColorScheme(
+//                primary = Color(0xFF219EBC),
+//                onPrimary = Color.White,
+//
+//                background = Color(0xFFF8FAFC),
+//                onBackground = Color(0xFF023047),
+//
+//                surface = Color.White,
+//                onSurface = Color(0xFF023047),
+//
+//                error = Color(0xFFDC2626)
+//            )
+//
+//
+//        }
+
         PosThemeMode.CLASSIC -> {
 
+            // =====================================================
+            // ACCENT COLORS — CART & PRIMARY ACTIONS
+            // =====================================================
             PosTheme.accent = PosAccentColors(
-                cartAddBg = Color(0xFFFB8500),       // Strong orange (CTA)
+
+                // Add Item — Primary Blue
+                cartAddBg = Color(0xFF3F74DF),
                 cartAddText = Color.White,
 
-                cartRemoveBorder = Color(0xFF219EBC), // Blue border
-                cartRemoveText = Color(0xFF219EBC),
+                // Remove Item — Terracotta
+                cartRemoveBorder = Color(0xFFB85334),
+                cartRemoveText = Color(0xFFB85334),
 
-                primaryActionBg = Color(0xFF219EBC),  // Main action (blue)
+                // Main action buttons — Blue
+                primaryActionBg = Color(0xFF3F74DF),
                 primaryActionText = Color.White
             )
 
+
+            // =====================================================
+            // PRODUCT COLORS
+            // =====================================================
             PosTheme.product = PosProductColors(
-                productCardBg = Color.White,
-                productCardText = Color(0xFF023047)   // Deep navy text
+
+                // Product tiles — Light Ice Blue
+                productCardBg = Color(0xFFC9DBF8),
+                productCardText = Color(0xFF003366)
             )
 
+
+            // =====================================================
+            // TOP BAR
+            // =====================================================
             PosTheme.topBar = PosTopBarColors(
-                background = Color(0xFF023047),       // Premium dark header
+
+                // Muted Slate Blue
+                background = Color(0xFF94A4CF),
                 content = Color.White
             )
 
-            PosTheme.category = PosCategoryColors(
-                selectedBg = Color(0xFFFFB703),       // Yellow highlight
-                selectedText = Color(0xFF023047),
 
-                unselectedBg = Color(0xFF8ECAE6),     // Soft blue
-                unselectedText = Color(0xFF023047)
+            // =====================================================
+            // CATEGORY BUTTONS
+            // =====================================================
+            PosTheme.category = PosCategoryColors(
+
+                // Selected category — Lime Green
+                selectedBg = Color(0xFF9BC71B),
+                selectedText = Color(0xFF1E3A00),
+
+                // Unselected category — Light Ice Blue
+                unselectedBg = Color(0xFFC9DBF8),
+                unselectedText = Color(0xFF003366)
             )
 
+
+            // =====================================================
+            // TOP BAR BUTTONS
+            // =====================================================
             PosTheme.topBarButton = PosTopBarButtonColors(
-                selectedBg = Color(0xFF219EBC),
+
+                // Selected button — Strong Blue
+                selectedBg = Color(0xFF3F74DF),
                 selectedContent = Color.White,
 
-                unselectedBg = Color(0xFF8ECAE6),
-                unselectedContent = Color(0xFF023047)
+                // Unselected button — Slate Blue
+                unselectedBg = Color(0xFF94A4CF),
+                unselectedContent = Color.White
             )
 
+
+            // =====================================================
+            // BILL COLORS
+            // =====================================================
             PosTheme.bill = PosBillColors(
+
+                // Bill panel — White
                 billBg = Color.White,
-                billText = Color(0xFF023047),
-                billTab = Color(0xFFF8FAFC),
+                billText = Color(0xFF003366),
 
-                inputBg = Color(0xFFF8FAFC),
-                inputBorder = Color(0xFFB0BEC5),
-                inputActiveBg = Color(0xFFE3F2FD),
-                inputActiveBorder = Color(0xFF219EBC),
+                // Bill tab — Slate Blue
+                billTab = Color(0xFF94A4CF),
 
+                // Input fields
+                inputBg = Color(0xFFF5F9FF),
+                inputBorder = Color(0xFF94A4CF),
+
+                // Active input — Light Sky Blue
+                inputActiveBg = Color(0xFFDCEBFA),
+                inputActiveBorder = Color(0xFF3F74DF),
+
+                // Status colors
                 success = Color(0xFF2E7D32),
-                warning = Color(0xFFFB8500),
-                danger = Color(0xFFC62828)
+                warning = Color(0xFFDEB04A),
+                danger = Color(0xFFB85334)
             )
 
+
+            // =====================================================
+            // MATERIAL 3 COLOR SCHEME
+            // =====================================================
+// MATERIAL 3 COLOR SCHEME
             lightColorScheme(
-                primary = Color(0xFF219EBC),
-                onPrimary = Color.White,
 
-                background = Color(0xFFF8FAFC),
-                onBackground = Color(0xFF023047),
+                // Main screen background
+                background = Color(0xFFDCEBFA),
+                onBackground = Color(0xFF003366),
 
+                // Cards and panels
                 surface = Color.White,
-                onSurface = Color(0xFF023047),
+                onSurface = Color(0xFF003366),
 
-                error = Color(0xFFDC2626)
+                // Secondary surfaces
+                surfaceVariant = Color(0xFFC9DBF8),
+                onSurfaceVariant = Color(0xFF003366),
+
+                // ...other colors
             )
-
-
         }
         // ================= DARK =================
         PosThemeMode.MIDNIGHT -> {
@@ -319,141 +441,205 @@ fun FoodPosTheme(
         // ================= OCEAN BLUE=================
         PosThemeMode.OCEAN -> {
 
+            // =====================================================
+            // ACCENT COLORS — CART & ACTIONS
+            // =====================================================
             PosTheme.accent = PosAccentColors(
-                cartAddBg = Color(0xFFF2C438),        // Yellow CTA (attention)
-                cartAddText = Color(0xFF035AA6),
+                // Add to Cart — Deep Ocean Blue
+                cartAddBg = Color(0xFF035AA6),
+                cartAddText = Color.White,
 
+                // Remove Item — Blue border
                 cartRemoveBorder = Color(0xFF049DD9),
                 cartRemoveText = Color(0xFF049DD9),
 
-                primaryActionBg = Color(0xFF049DD9),  // Main blue action
+                // Primary Action — Deep Ocean Blue
+                primaryActionBg = Color(0xFF035AA6),
                 primaryActionText = Color.White
             )
 
+            // =====================================================
+            // PRODUCT COLORS
+            // =====================================================
             PosTheme.product = PosProductColors(
                 productCardBg = Color.White,
-                productCardText = Color(0xFF035AA6)   // Deep blue text
+                productCardText = Color(0xFF035AA6)
             )
 
+            // =====================================================
+            // TOP BAR
+            // =====================================================
             PosTheme.topBar = PosTopBarColors(
-                background = Color(0xFF035AA6),       // Strong brand header
+                background = Color(0xFF035AA6),
                 content = Color.White
             )
 
+            // =====================================================
+            // CATEGORY BUTTONS
+            // =====================================================
             PosTheme.category = PosCategoryColors(
-                selectedBg = Color(0xFFF2C438),       // Yellow highlight
-                selectedText = Color(0xFF035AA6),
+                // Selected category — Blue
+                selectedBg = Color(0xFF049DD9),
+                selectedText = Color.White,
 
-                unselectedBg = Color(0xFFF2F2F2),     // Soft neutral
+                // Unselected category — Light blue
+                unselectedBg = Color(0xFFE3F2FD),
                 unselectedText = Color(0xFF035AA6)
             )
 
+            // =====================================================
+            // TOP BAR BUTTONS
+            // =====================================================
             PosTheme.topBarButton = PosTopBarButtonColors(
-                selectedBg = Color(0xFF04B2D9),       // Slightly lighter blue
+                selectedBg = Color(0xFF049DD9),
                 selectedContent = Color.White,
 
                 unselectedBg = Color.Transparent,
                 unselectedContent = Color.White.copy(alpha = 0.85f)
             )
+
+            // =====================================================
+            // BILL COLORS
+            // =====================================================
             PosTheme.bill = PosBillColors(
                 billBg = Color.White,
                 billText = Color(0xFF035AA6),
-                billTab = Color(0xFFF2F2F2),
+                billTab = Color(0xFFE3F2FD),
 
-                inputBg = Color(0xFFF8FAFC),
+                inputBg = Color(0xFFF5F9FF),
                 inputBorder = Color(0xFFBFD6E5),
-                inputActiveBg = Color(0xFFE3F2FD),
+                inputActiveBg = Color(0xFFDCEBFA),
                 inputActiveBorder = Color(0xFF049DD9),
 
                 success = Color(0xFF2E7D32),
-                warning = Color(0xFFF2C438),
+                warning = Color(0xFF1976D2),
                 danger = Color(0xFFC62828)
             )
 
+            // =====================================================
+            // MATERIAL 3 COLOR SCHEME
+            // =====================================================
             lightColorScheme(
-                primary = Color(0xFF049DD9),
+                primary = Color(0xFF035AA6),
                 onPrimary = Color.White,
 
-                background = Color(0xFFF2F2F2),       // Soft app background
+                secondary = Color(0xFF049DD9),
+                onSecondary = Color.White,
+
+                // Light sky-blue main background
+//                background = Color(0xFFB8D7F5),
+//                onBackground = Color(0xFF035AA6),
+
+                background = Color(0xFFC6DDF4),
                 onBackground = Color(0xFF035AA6),
 
+                // White cards and panels
                 surface = Color.White,
                 onSurface = Color(0xFF035AA6),
 
-                error = Color(0xFFDC2626)
-            )
+                // Secondary surfaces
+                surfaceVariant = Color(0xFFE3F2FD),
+                onSurfaceVariant = Color(0xFF035AA6),
 
+//                outline = Color(0xFFBFD6E5),
+                outline = Color(0xFF7899C4),
+                error = Color(0xFFC62828),
+                onError = Color.White
+            )
         }
 
         // ================= SLATE BLUESLATE =================
+
+
+
         PosThemeMode.SLATE -> {
 
+            // ACTION BUTTONS
             PosTheme.accent = PosAccentColors(
-                cartAddBg = Color(0xFFEE6C4D),       // Coral action
+
+                // Add Item — Deep Teal
+                cartAddBg = Color(0xFF0F766E),
                 cartAddText = Color.White,
 
-                cartRemoveBorder = Color(0xFFEE6C4D),
-                cartRemoveText = Color(0xFFEE6C4D),
+                // Remove item — red outlined action
+                cartRemoveBorder = Color(0xFFC62828),
+                cartRemoveText = Color(0xFFC62828),
 
-                primaryActionBg = Color(0xFFEE6C4D),
+                // Main action — deep navy
+                primaryActionBg = Color(0xFF243B53),
                 primaryActionText = Color.White
             )
 
+            // PRODUCT CARDS
             PosTheme.product = PosProductColors(
-              //  productCardBg = Color(0xFFE0FBFC),
-                productCardBg =   Color(0xFF3D5A80),
-                productCardText = Color.White,
+                productCardBg = Color.White,
+                productCardText = Color(0xFF243B53)
             )
 
+            // TOP BAR — DEEP NAVY
             PosTheme.topBar = PosTopBarColors(
-                background = Color(0xFF3D5A80),
+                background = Color(0xFF243B53),
                 content = Color.White
             )
 
+            // CATEGORY BUTTONS
             PosTheme.category = PosCategoryColors(
-                selectedBg = Color(0xFFEE6C4D),
+                selectedBg = Color(0xFF0F766E),
                 selectedText = Color.White,
 
-                unselectedBg = Color(0xFF98C1D9),
-                unselectedText = Color(0xFF293241)
+                unselectedBg = Color(0xFFE9EFF5),
+                unselectedText = Color(0xFF334E68)
             )
 
+            // TOP BAR BUTTONS
             PosTheme.topBarButton = PosTopBarButtonColors(
-                selectedBg = Color(0xFFEE6C4D),
-                selectedContent = Color.White,
+                selectedBg = Color.White,
+                selectedContent = Color(0xFF243B53),
 
-                unselectedBg = Color(0xFF98C1D9),
-                unselectedContent = Color(0xFF293241)
+                unselectedBg = Color(0xFF334E68),
+                unselectedContent = Color.White
             )
 
+            // BILL SCREEN
             PosTheme.bill = PosBillColors(
-                billBg = Color(0xFFE0FBFC),
-                billText = Color(0xFF293241),
-                billTab = Color(0xFF3D5A80),
+                billBg = Color.White,
+                billText = Color(0xFF243B53),
+                billTab = Color(0xFF243B53),
 
                 inputBg = Color.White,
-                inputBorder = Color(0xFF98C1D9),
-                inputActiveBg = Color(0xFFF4FDFF),
-                inputActiveBorder = Color(0xFFEE6C4D),
+                inputBorder = Color(0xFFCBD5E1),
+                inputActiveBg = Color(0xFFF0FDFA),
+                inputActiveBorder = Color(0xFF0F766E),
 
                 success = Color(0xFF2E7D32),
-                warning = Color(0xFFEE6C4D),
+                warning = Color(0xFFB7791F),
                 danger = Color(0xFFC62828)
             )
+
+            // LIGHT MATERIAL COLOR SCHEME
             lightColorScheme(
-                primary = Color(0xFFEE6C4D),
+                primary = Color(0xFF243B53),
                 onPrimary = Color.White,
 
-                background = Color(0xFF3D5A80),
-                onBackground = Color.White,
+                secondary = Color(0xFF0F766E),
+                onSecondary = Color.White,
 
-                surface = Color(0xFFE0FBFC),
-                onSurface = Color(0xFF293241),
+                background = Color(0xFFF4F6F8),
+                onBackground = Color(0xFF243B53),
 
-                error = Color(0xFFDC2626)
+                surface = Color.White,
+                onSurface = Color(0xFF243B53),
+
+                surfaceVariant = Color(0xFFE9EFF5),
+                onSurfaceVariant = Color(0xFF334E68),
+
+                outline = Color(0xFFCBD5E1),
+
+                error = Color(0xFFC62828),
+                onError = Color.White
             )
-
         }
+
 
         // ================= LATTE combination of light coffee=================
         PosThemeMode.LATTE -> {

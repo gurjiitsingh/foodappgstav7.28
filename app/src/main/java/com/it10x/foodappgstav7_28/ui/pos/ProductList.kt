@@ -164,9 +164,10 @@ private fun ParentProductCard(
             .border(
                 BorderStroke(
                     1.dp,
-                    MaterialTheme.colorScheme.outline.copy(alpha = 0.10f) // light, subtle border
+                    MaterialTheme.colorScheme.outline.copy(alpha = 0.20f) // light, subtle border
                 )
             ),
+
         color = productBg,
         shape = RectangleShape
     ) {
