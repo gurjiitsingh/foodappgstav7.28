@@ -26,7 +26,7 @@ import com.it10x.foodappgstav7_28.viewmodel.OnlineOrdersViewModel
 import com.it10x.foodappgstav7_28.viewmodel.RealtimeOrdersViewModel
 import com.it10x.foodappgstav7_28.navigation.NavigationHost
 import com.it10x.foodappgstav7_28.printer.AutoPrintManager
-import com.it10x.foodappgstav7_28.service.OrderListenerService
+import com.it10x.foodappgstav7_28.service.OnlineOrderMonitoringService
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -501,12 +501,10 @@ class MainActivity : ComponentActivity() {
                     globalSyncManager.startListening()
                 }
 
-
-
             // ✅ START SERVICE ONLY NOW
                 if (role == PosRole.MAIN) {
                     LaunchedEffect(Unit) {
-                        val serviceIntent = Intent(context, OrderListenerService::class.java)
+                        val serviceIntent = Intent(context, OnlineOrderMonitoringService::class.java)
                         context.startForegroundService(serviceIntent)
                     }
                 }

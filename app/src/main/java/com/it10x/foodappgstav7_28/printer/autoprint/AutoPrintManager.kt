@@ -22,15 +22,6 @@ class AutoPrintManager(
 
     fun onNewOrder(order: OrderMasterData) {
 
-//        Log.d(
-//            "ONLINE_SRNO",
-//            "📥 ONLINE ORDER RECEIVED FOR PRINTING: " +
-//                    "id=${order.id}, " +
-//                    "srno=${order.srno}, " +
-//                    "orderType=${order.orderType}, " +
-//                    "source=${order.source}"
-//        )
-
         // ⛔ Already printed in DB
         if (order.printed == true) return
 

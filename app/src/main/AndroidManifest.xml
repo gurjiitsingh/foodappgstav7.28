@@ -83,7 +83,7 @@
 
         <!-- FOREGROUND SERVICE -->
         <service
-            android:name=".service.OrderListenerService"
+            android:name=".service.OnlineOrderMonitoringService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 

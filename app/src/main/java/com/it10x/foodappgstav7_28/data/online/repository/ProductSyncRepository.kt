@@ -103,9 +103,12 @@ class ProductSyncRepository(
                 currentStock =
                     (data["currentStock"] as? Number)
                         ?.toDouble() ?: 0.0,
+
                 // ------------ TAX ------------
                 taxRate = (data["taxRate"] as? Number)?.toDouble(),
                 taxType = data["taxType"] as? String,
+                taxRate1 = (data["taxRate1"] as? Number)?.toDouble(),
+                taxType1 = data["taxType1"] as? String,
                 // ------------ META ------------
                 type = data["type"] as? String,   // keep but don't depend on it
                 // ------------ POS SEARCH ------------

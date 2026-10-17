@@ -67,7 +67,8 @@ data class ProductEntity(
     // =====================================================
     val taxRate: Double?,
     val taxType: String?,          // inclusive | exclusive
-
+    val taxRate1: Double? = null,
+    val taxType1: String? = null,
     // =====================================================
     // OPTIONAL META (SAFE)
     // =====================================================

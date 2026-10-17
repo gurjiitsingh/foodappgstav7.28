@@ -13,6 +13,11 @@ import com.it10x.foodappgstav7_28.data.printqueue.PrintQueueDao
 import com.it10x.foodappgstav7_28.data.pos.entity.ProductRecipeEntity
 
 import androidx.room.Entity
+import com.it10x.foodappgstav7_28.data.online.local.OnlineReceivedOrderDao
+import com.it10x.foodappgstav7_28.data.online.local.OnlineReceivedOrderEntity
+import com.it10x.foodappgstav7_28.data.online.local.OnlineReceivedOrderProductEntity
+
+
 @Database(
     entities = [
         ProductEntity::class,
@@ -48,8 +53,10 @@ import androidx.room.Entity
         OrderCounterEntity::class,
         OrderSerialMapEntity::class,
         PosRenewalEntity::class,
+        OnlineReceivedOrderEntity::class,
+        OnlineReceivedOrderProductEntity::class
     ],
-    version = 156,              // ⬆️ increment version since schema changed
+    version = 160,              // ⬆️ increment version since schema changed
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -98,5 +105,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun orderSerialMapDao(): OrderSerialMapDao
 
     abstract fun posRenewalDao(): PosRenewalDao
+
+    abstract fun onlineReceivedOrderDao(): OnlineReceivedOrderDao
 
 }

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.it10x.foodappgstav7_28.data.online.models.OrderMasterData
-import com.it10x.foodappgstav7_28.data.online.repository.RealtimeOrdersRepository
+import com.it10x.foodappgstav7_28.data.online.repository.FirestoreOnlineOrdersRepository
 import com.it10x.foodappgstav7_28.printer.AutoPrintManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +23,7 @@ class RealtimeOrdersViewModel(
     private val autoPrintManager: AutoPrintManager
 ) : AndroidViewModel(application) {
 
-    private val repo = RealtimeOrdersRepository()
+    private val repo = FirestoreOnlineOrdersRepository()
 
     // =====================================================
     // REALTIME ORDERS FOR UI
